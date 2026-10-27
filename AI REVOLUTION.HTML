@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Future World</title>
+  <style>
+    :root {
+      --sky: #dff4ff;
+      --sky-strong: #bfe7ff;
+      --yellow: #ffe27a;
+      --yellow-strong: #ffd84d;
+      --pink: #ffd7e8;
+      --green: #d7f7d1;
+      --purple: #e1d9ff;
+      --orange: #ffd7a8;
+      --text: #204060;
+      --dark: #123456;
+      --white: #ffffff;
+      --card: #fffdf9;
+      --shadow: #c6d8ef;
+      --success: #2ca86a;
+      --danger: #d96565;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", "Arial", sans-serif;
+      background: linear-gradient(to bottom, var(--sky), #fdf9d8);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 16px 50px;
+    }
+
+    .topbar {
+      background: #fffef8;
+      border: 4px solid var(--dark);
+      border-radius: 25px;
+      box-shadow: 0 8px 0 var(--shadow);
+      padding: 16px 18px;
+      margin-bottom: 20px;
+    }
+
+    .topbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 2vw + 1rem, 3rem);
+      color: var(--dark);
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .nav-btn, .topic-btn, .main-btn, .small-btn, .quiz-submit, .restart-btn {
+      border: 3px solid var(--dark);
+      border-radius: 18px;
+      padding: 10px 16px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+      box-shadow: 0 4px 0 rgba(18, 52, 86, 0.7);
+    }
+
+    .nav-btn:hover, .topic-btn:hover, .main-btn:hover, .small-btn:hover, .quiz-submit:hover, .restart-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .nav-btn {
+      background: var(--yellow);
+    }
+
+    .nav-btn.active {
+      background: var(--sky-strong);
+    }
+
+    .main-btn {
+      background: var(--yellow-strong);
+    }
+
+    .small-btn {
+      background: var(--green);
+    }
+
+    .quiz-submit {
+      background: var(--purple);
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .restart-btn {
+      background: var(--pink);
+      margin-top: 15px;
+      display: none;
+    }
+
+    .restart-btn.show {
+      display: inline-block;
+    }
+
+    .panel {
+      display: none;
+      background: rgba(255, 255, 255, 0.65);
+      border: 4px solid var(--dark);
+      border-radius: 30px;
+      box-shadow: 0 10px 0 var(--shadow);
+      padding: 20px 18px;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .robot-card {
+      background: linear-gradient(to bottom, var(--yellow), #fff0a7);
+      border: 4px solid var(--dark);
+      border-radius: 28px;
+      min-height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 0 4px rgba(255,255,255,0.4);
+    }
+
+    .robot {
+      font-size: 7rem;
+      text-align: center;
+      transform: rotate(-4deg);
+      filter: drop-shadow(4px 4px 0 rgba(18,52,86,0.15));
+    }
+
+    .intro {
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+
+    .topic-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .topic-btn {
+      background: var(--sky-strong);
+      min-width: 180px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(250px, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 3px solid var(--dark);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 5px 0 rgba(18,52,86,0.2);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: var(--dark);
+      font-size: 1.3rem;
+    }
+
+    .card p, .card li {
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    .card ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .big-title {
+      font-size: clamp(1.7rem, 2vw + 0.8rem, 2.5rem);
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+
+    .section-info {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .quiz-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .question-box {
+      background: #fffdf7;
+      border: 3px solid var(--dark);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 5px 0 rgba(18,52,86,0.2);
+    }
+
+    .question-box h4 {
+      margin: 0 0 12px;
+      font-size: 1.15rem;
+      color: var(--dark);
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .answer-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f6fbff;
+      border: 2px solid #cfe7f8;
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 1rem;
+    }
+
+    .answer-option input {
+      accent-color: var(--dark);
+      transform: scale(1.2);
+    }
+
+    .feedback {
+      margin-top: 12px;
+      font-weight: bold;
+      min-height: 24px;
+      color: var(--success);
+    }
+
+    .feedback.wrong {
+      color: var(--danger);
+    }
+
+    .result-box {
+      background: linear-gradient(to bottom, var(--green), #eafae7);
+      border: 3px solid var(--dark);
+      border-radius: 20px;
+      padding: 16px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .result-box.show {
+      display: block;
+    }
+
+    .about-form {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 18px;
+      margin-top: 14px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-weight: bold;
+    }
+
+    .field input {
+      width: 100%;
+      border: 3px solid var(--dark);
+      border-radius: 14px;
+      padding: 12px 10px;
+      font-size: 1rem;
+      background: #fffefc;
+    }
+
+    .project-preview {
+      margin-top: 22px;
+      background: linear-gradient(to bottom, var(--orange), #fff1cd);
+      border: 3px solid var(--dark);
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .project-preview h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 760px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .robot-card {
+        min-height: 180px;
+      }
+
+      .content-grid,
+      .about-form {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        justify-content: flex-start;
+      }
+
+      .topbar-inner {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <h1>AI Future World 🤖</h1>
+        <nav class="nav" aria-label="Main navigation">
+          <button class="nav-btn active" type="button" data-section="home">Home</button>
+          <button class="nav-btn" type="button" data-section="what-is-ai">What Is AI?</button>
+          <button class="nav-btn" type="button" data-section="education">AI in Education</button>
+          <button class="nav-btn" type="button" data-section="healthcare">AI in Healthcare</button>
+          <button class="nav-btn" type="button" data-section="transport">AI in Transport</button>
+          <button class="nav-btn" type="button" data-section="future">Digital Future</button>
+          <button class="nav-btn" type="button" data-section="quiz">AI Quiz</button>
+          <button class="nav-btn" type="button" data-section="about">About Project</button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section id="home" class="panel active">
+        <div class="hero">
+          <div class="robot-card">
+            <div class="robot" aria-label="Cute robot emoji">🤖</div>
+          </div>
+
+          <div>
+            <h2 class="big-title">Welcome to the World of Artificial Intelligence!</h2>
+            <p class="intro">
+              Artificial Intelligence, or AI, is when computers and machines can do things that
+              usually need human thinking. AI can help us learn, solve problems, and make our
+              daily lives easier. In the future, AI may be part of many important jobs, devices,
+              and services.
+            </p>
+
+            <div class="topic-buttons">
+              <button class="topic-btn" type="button" data-section="what-is-ai">What is AI?</button>
+              <button class="topic-btn" type="button" data-section="education">AI in Education</button>
+              <button class="topic-btn" type="button" data-section="healthcare">AI in Healthcare</button>
+              <button class="topic-btn" type="button" data-section="transport">AI in Transport</button>
+              <button class="topic-btn" type="button" data-section="future">Digital Future</button>
+              <button class="topic-btn" type="button" data-section="quiz">AI Quiz</button>
+              <button class="topic-btn" type="button" data-section="about">About Project</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="what-is-ai" class="panel">
+        <h2 class="big-title">What Is AI?</h2>
+        <p class="section-info">
+          AI means creating smart computer systems that can learn from data and make choices.
+          It does not mean a robot is thinking like a human in every way. Instead, AI is a tool
+          that can help people with tasks such as recognising patterns, understanding language,
+          and solving problems.
+        </p>
+
+        <div class="content-grid">
+          <div class="card">
+            <h3>Everyday examples</h3>
+            <ul>
+              <li>Voice helpers like Siri or Alexa</li>
+              <li>Movie and music recommendations</li>
+              <li>Smart home devices that turn lights on or off</li>
+              <li>Search engines that suggest useful results</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>How AI helps</h3>
+            <p>
+              AI can look at lots of information and find patterns quickly. It can help us
+              answer questions, sort data, and do repeated tasks in a faster way.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Simple idea</h3>
+            <p>
+              Think of AI like a very smart helper that learns from examples. The more data it
+              sees, the better it can make predictions or decisions.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Important message</h3>
+            <p>
+              AI is useful, but people still need to guide it, check its work, and use it
+              responsibly.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="education" class="panel">
+        <h2 class="big-title">AI in Education</h2>
+        <p class="section-info">
+          AI can help students learn in new and personal ways. It can support teachers and make
+          learning more interesting and easier to understand.
+        </p>
+
+        <div class="content-grid">
+          <div class="card">
+            <h3>Personalised learning</h3>
+            <p>
+              AI can adjust lessons to match each student’s level. If you need extra practice,
+              it can give more examples and support.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Learning helpers</h3>
+            <p>
+              Educational assistants can explain difficult ideas in simple language, help with
+              homework, and suggest good study resources.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Teacher support</h3>
+            <p>
+              AI can help teachers mark simple tasks, track student progress, and identify areas
+              where students may need extra help.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Good use of AI</h3>
+            <p>
+              AI should support learning, not replace thinking. Students should still read, ask
+              questions, and do their own work.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="healthcare" class="panel">
+        <h2 class="big-title">AI in Healthcare</h2>
+        <p class="section-info">
+          AI can help doctors and scientists by examining medical information and looking for
+          patterns that may help people stay healthier.
+        </p>
+
+        <div class="content-grid">
+          <div class="card">
+            <h3>Helping doctors</h3>
+            <p>
+              AI can look at scans, test results, or patient records to help detect problems
+              earlier and support diagnoses.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Medical research</h3>
+            <p>
+              Scientists use AI to study large amounts of health data and discover new patterns,
+              treatments, and medicines.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Better care</h3>
+            <p>
+              AI can help hospitals organise information and make healthcare more efficient and
+              more focused on patients.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Human care still matters</h3>
+            <p>
+              Even with AI, doctors and nurses use their knowledge, compassion, and judgment to
+              make important decisions.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="transport" class="panel">
+        <h2 class="big-title">AI in Transportation</h2>
+        <p class="section-info">
+          Transportation systems can become smarter with AI. This can help reduce traffic jams,
+          improve safety, and create better travel experiences.
+        </p>
+
+        <div class="content-grid">
+          <div class="card">
+            <h3>Smart traffic systems</h3>
+            <p>
+              AI can study traffic patterns and help control lights or routes to reduce delays.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Self-driving cars</h3>
+            <p>
+              Self-driving technology uses sensors and AI to understand roads, signs, and other
+              vehicles.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Public transport</h3>
+            <p>
+              AI can help plan bus and train routes, estimate waiting times, and keep services
+              running smoothly.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Safety first</h3>
+            <p>
+              Even advanced systems need human monitoring and rules to stay safe and fair for all
+              people.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="future" class="panel">
+        <h2 class="big-title">Digital Future</h2>
+        <p class="section-info">
+          In the future, AI and digital technology may change how we live, work, learn, and
+          connect with each other. There will be many opportunities, but we also need to be
+          careful and responsible.
+        </p>
+
+        <div class="content-grid">
+          <div class="card">
+           
